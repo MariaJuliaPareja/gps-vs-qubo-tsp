@@ -1,0 +1,29 @@
+{
+  "n_qubits": 16,
+  "circuit_depth": 6,
+  "gate_count": 37,
+  "execution_time_sec": 4.2320765249896795,
+  "objective_value": -4732.901049440219,
+  "optimal_bitstring": [
+    0,
+    1,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    1
+  ],
+  "instance": "synth04",
+  "n_cities": 4,
+  "formulation": "traditional",
+  "replica": 1
+}
