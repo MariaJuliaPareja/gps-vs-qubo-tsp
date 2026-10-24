@@ -1,7 +1,4 @@
-"""
-validate_formulations.py
-Validates Traditional and GPS against brute force / exhaustive enumeration.
-"""
+"""Validates Traditional and GPS against brute force and exhaustive enumeration."""
 
 import numpy as np
 import itertools

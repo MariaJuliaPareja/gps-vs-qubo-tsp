@@ -1,0 +1,12 @@
+{
+  "n_qubits": 25,
+  "circuit_depth": 6,
+  "gate_count": 55,
+  "execution_time_sec": 975.578598607,
+  "objective_value": -1986.632880689994,
+  "optimal_bitstring": null,
+  "instance": "synth05",
+  "n_cities": 5,
+  "formulation": "traditional",
+  "replica": 0
+}

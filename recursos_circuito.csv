@@ -1,0 +1,9 @@
+n,formulacion,origen_instancia,variables_Q,qubits_activos,variables_descartadas,terminos_lineales,terminos_cuadraticos,profundidad_bloques,profundidad_transpilada,compuertas_total,cx,memoria_statevector_GB
+3,traditional,synth03,9,9,0,9,36,2,88,351,144,8.192e-06
+3,gps,synth03,30,30,0,30,45,2,112,720,180,17.179869184
+4,traditional,synth04,16,16,0,16,96,2,145,816,384,0.001048576
+4,gps,synth04,54,54,0,54,108,2,160,1458,432,288230376.15171176
+5,traditional,synth05,25,25,0,25,200,2,214,1575,800,0.536870912
+5,gps,synth05,84,84,0,72,222,2,235,2592,888,3.094850098213451e+17
+6,traditional,synth06,36,36,0,36,360,2,295,2700,1440,1099.511627776
+6,gps,synth06,120,120,0,120,405,2,331,4230,1620,2.1267647932558655e+28

@@ -1,11 +1,4 @@
-"""
-statistical_analysis.py
-Statistical analysis plan: descriptive stats, Shapiro-Wilk, Wilcoxon
-(paired by replica), correlation, LOWESS regression.
-
-Usage:
-    python statistical_analysis.py --input results/consolidated.csv
-"""
+"""Descriptivos, Shapiro-Wilk, Wilcoxon pareado por réplica, correlación y LOWESS."""
 
 import argparse
 import pandas as pd
@@ -14,9 +7,11 @@ import statsmodels.api as sm
 
 ALPHA = 0.05
 
+
 def descriptive_analysis(df, metric):
     return df.groupby("formulation")[metric].agg(mean="mean", std="std",
                                                    min="min", max="max", n="count")
+
 
 def normality_test(df, metric):
     results = {}
@@ -29,6 +24,7 @@ def normality_test(df, metric):
         results[form] = {"W": stat, "p_value": p, "is_normal": p > ALPHA}
     return results
 
+
 def wilcoxon_test(df, metric, id_cols=("instance", "replica")):
     pivot = df.pivot_table(index=list(id_cols), columns="formulation", values=metric).dropna()
     if "gps" not in pivot.columns or "traditional" not in pivot.columns or len(pivot) < 1:
@@ -39,6 +35,7 @@ def wilcoxon_test(df, metric, id_cols=("instance", "replica")):
         "significant": p < ALPHA,
         "mean_diff_gps_minus_traditional": (pivot["gps"] - pivot["traditional"]).mean(),
     }
+
 
 def correlation_analysis(df, metric_x, metric_y):
     sub = df[[metric_x, metric_y]].dropna()
@@ -54,6 +51,7 @@ def correlation_analysis(df, metric_x, metric_y):
         method = "Spearman"
     return {"method": method, "coefficient": r, "p_value": p, "significant": p < ALPHA}
 
+
 def scalability_lowess(df, metric, frac=0.5):
     results = {}
     for form in df["formulation"].unique():
@@ -64,6 +62,7 @@ def scalability_lowess(df, metric, frac=0.5):
         smoothed = sm.nonparametric.lowess(sub[metric], sub["n_cities"], frac=frac)
         results[form] = {"n_points": smoothed[:, 0].tolist(), "smoothed_value": smoothed[:, 1].tolist()}
     return results
+
 
 def full_report(df, metrics=("execution_time_sec", "circuit_depth", "gate_count",
                               "n_qubits", "objective_value")):
@@ -83,6 +82,7 @@ def full_report(df, metrics=("execution_time_sec", "circuit_depth", "gate_count"
                                for x, y in pairs if x in df.columns and y in df.columns}
     return report
 
+
 def print_report(report):
     for metric, content in report.items():
         if metric == "correlations":
@@ -98,6 +98,7 @@ def print_report(report):
     print("\n=== Correlations ===")
     for pair, r in report.get("correlations", {}).items():
         print(pair, ":", r.get("error") or f"{r['method']} r={r['coefficient']:.4f}, p={r['p_value']:.4f}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

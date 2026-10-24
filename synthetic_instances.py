@@ -1,8 +1,4 @@
-"""
-synthetic_instances.py
-Small synthetic TSP instances (n=3 to 6), fixed seed. Replaces TSPLIB
-(see README, "Why TSPLIB is not used").
-"""
+"""Small synthetic TSP instances (n=3 to 6), fixed seed. Replaces TSPLIB (see README, "Why TSPLIB is not used")."""
 
 import numpy as np
 
@@ -35,5 +31,8 @@ def load_instance(name: str):
 
 if __name__ == "__main__":
     for name, n in SAMPLE.items():
-        dist, _ = generate_instance(n)
-        print(f"{name}: n={n}, total distance={dist.sum():.2f}")
+        dist, coords = generate_instance(n)
+        np.savetxt(f"{name}_dist.csv", dist, delimiter=",", fmt="%.6f")
+        np.savetxt(f"{name}_coords.csv", coords, delimiter=",", fmt="%.6f",
+                   header="x,y", comments="")
+

@@ -1,0 +1,5 @@
+n,formulacion,replicas,factibles,costo_optimo,brecha_ruta_media_pct,brecha_ruta_max_pct,nota
+3,gps,20,0,195.16205375718332,,,no definida (0 soluciones factibles)
+3,traditional,20,18,195.16205375718332,4.854377662604044e-15,1.456313298781213e-14,
+4,traditional,8,0,196.32849620562484,,,no definida (0 soluciones factibles)
+5,traditional,8,0,226.9424609129514,,,no definida (0 soluciones factibles)

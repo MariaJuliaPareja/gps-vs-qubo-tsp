@@ -1,0 +1,15 @@
+﻿ID,Tipo,Requisito,Criterio de verificación,Componente,OE
+RF01,Funcional,"Generar instancias TSP sintéticas euclidianas y reproducibles (n = 3, 4, 5).",Misma semilla produce la misma matriz de distancias.,synthetic_instances.py,OE2
+RF02,Funcional,Construir la matriz Q de la formulación Tradicional (one-hot ciudad × posición).,Q tiene n² variables (n = 3: 9).,build_traditional_qubo,OE1
+RF03,Funcional,Construir la matriz Q de GPS con depósito duplicado y tres estados por par.,Q tiene 3(n−1)(n+2) variables (n = 3: 30).,build_gps_qubo,OE1
+RF04,Funcional,"Resolver cada Q con QAOA (p = 2, maxiter = 30) en réplicas independientes.","20 réplicas pareadas en n = 3; 8 réplicas por tamaño en n = 4, 5.",run_aws_full.py,OE2
+RF05,Funcional,"Persistir cada réplica (bitstring, energía, tiempo, recursos).",Un JSON por réplica y fila CSV escrita dentro del bucle.,run_aws_full.py,"OE2, OE3"
+RF06,Funcional,Decodificar el bitstring y verificar todas las restricciones.,Tour válido o lista de violaciones por réplica.,"traditional_tour, gps_violations",OE3
+RF07,Funcional,"Calcular factibilidad, brecha, tiempo y pruebas estadísticas.","Fisher exacto, Mann-Whitney U, LOWESS reproducibles.",statistical_analysis_v2.py,"OE3, OE4"
+RF08,Funcional,"Contar recursos del circuito sin simular (profundidad, CNOT) para n = 3–6.","Transpilación a {rz, sx, x, cx} con semilla fija.",recursos_circuito.py,"OE2, OE4"
+RNF01,Rendimiento,El statevector debe caber en la RAM disponible (31 GB).,2^q · 16 B ≤ 31 GB  →  q ≤ 30 qubits.,EC2 t2.2xlarge (CPU),OE4
+RNF02,Reproducibilidad,Semillas fijas y versiones de software registradas.,Re-ejecución produce los mismos recursos y matrices Q.,"Qiskit 2.x, Python",OE2
+RNF03,Tolerancia a fallos,Las ejecuciones largas sobreviven a desconexiones.,Sesión tmux; ninguna réplica perdida por caída de SSH.,"tmux, escritura por réplica",OE2
+RNF04,Integridad de datos,Separar corridas de prueba y producción; verificar energías.,x^T Q x = objective_value en filas con bitstring.,statistical_analysis_v2.py,OE3
+RNF05,Comparabilidad,"Ambas formulaciones usan el mismo ansatz, optimizador, réplicas y hardware.",Solo varía la matriz Q entre tratamientos.,run_aws_full.py,OE2
+RNF06,Trazabilidad,Toda figura y tabla se regenera desde scripts versionados.,Un comando reconstruye figuras/ completo.,"figuras_tesis.py, extras_tesis.py",Todos

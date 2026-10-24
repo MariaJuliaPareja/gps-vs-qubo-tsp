@@ -1,15 +1,4 @@
-"""
-qaoa_experiment.py
-Runs QAOA (Qiskit) on the Traditional and GPS formulations for the small
-synthetic instances (n=3 to 6). Defaults to CPU -- see README for which
-instance size requires a high-memory cloud machine (GPS n=3, ~1TB).
-
-Requires: pip install qiskit qiskit-aer qiskit-algorithms qiskit-optimization
-(add qiskit-aer-gpu only when running with --device GPU)
-
-Usage:
-    python qaoa_experiment.py --instances synth03,synth04,synth05 --device CPU --replicas 5
-"""
+"""QAOA (Qiskit) sobre las formulaciones Tradicional y GPS (instancias sintéticas n = 3..6)."""
 
 import argparse
 import json
@@ -37,23 +26,29 @@ def run_qaoa_on_qubo(Q: np.ndarray, reps: int, device: str, maxiter: int = 50):
         """QAOAAnsatz produces a non-basis 'QAOA' instruction that Aer's
         simulator cannot run directly; this transpiles each circuit to basis
         gates before simulation (see README, Qiskit 2.x compatibility note).
+        Uses SamplerPub.coerce() to normalize pubs regardless of the exact
+        format qiskit_algorithms passes internally (plain tuple vs SamplerPub
+        object) -- naive tuple-unpacking silently dropped parameter values
+        for some pub shapes, causing parameter/circuit mismatches downstream.
         Caches the transpiled circuit by identity, since COBYLA calls run()
         repeatedly on the same circuit structure with only parameters changing."""
         _cache = {}
 
         def run(self, pubs, *, shots=None):
+            from qiskit.primitives.containers import SamplerPub
             backend = AerSimulator(device=device)
             new_pubs = []
             for pub in pubs:
-                if isinstance(pub, tuple):
-                    circ, rest = pub[0], pub[1:]
-                else:
-                    circ, rest = pub, ()
-                key = id(circ)
+                coerced = SamplerPub.coerce(pub)
+                key = id(coerced.circuit)
                 if key not in self._cache:
-                    self._cache[key] = transpile(circ, backend)
+                    self._cache[key] = transpile(coerced.circuit, backend)
                 tcirc = self._cache[key]
-                new_pubs.append((tcirc,) + rest if rest else tcirc)
+                new_pubs.append(SamplerPub(
+                    circuit=tcirc,
+                    parameter_values=coerced.parameter_values,
+                    shots=coerced.shots,
+                ))
             return super().run(new_pubs, shots=shots)
 
     n = Q.shape[0]

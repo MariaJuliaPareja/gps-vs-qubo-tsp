@@ -1,0 +1,15 @@
+﻿ID,Type,Requirement,Verification criterion,Component,SO
+FR01,Functional,"Generate reproducible synthetic Euclidean TSP instances (n = 3, 4, 5).",Same seed yields the same distance matrix.,synthetic_instances.py,SO2
+FR02,Functional,Build the Q matrix of the Traditional formulation (one-hot city × position).,Q has n² variables (n = 3: 9).,build_traditional_qubo,SO1
+FR03,Functional,Build the GPS Q matrix with split depot and three states per pair.,Q has 3(n−1)(n+2) variables (n = 3: 30).,build_gps_qubo,SO1
+FR04,Functional,"Solve each Q with QAOA (p = 2, maxiter = 30) in independent replicas.","20 paired replicas at n = 3; 8 replicas per size at n = 4, 5.",run_aws_full.py,SO2
+FR05,Functional,"Persist every replica (bitstring, energy, time, resources).",One JSON per replica and a CSV row written inside the loop.,run_aws_full.py,"SO2, SO3"
+FR06,Functional,Decode the bitstring and check every constraint.,Valid tour or list of violations per replica.,"traditional_tour, gps_violations",SO3
+FR07,Functional,"Compute feasibility, gap, time and statistical tests.","Reproducible Fisher exact, Mann-Whitney U, LOWESS.",statistical_analysis_v2.py,"SO3, SO4"
+FR08,Functional,"Count circuit resources without simulation (depth, CNOT) for n = 3–6.","Transpilation to {rz, sx, x, cx} with fixed seed.",recursos_circuito.py,"SO2, SO4"
+NFR01,Performance,The statevector must fit in available RAM (31 GB).,2^q · 16 B ≤ 31 GB  →  q ≤ 30 qubits.,EC2 t2.2xlarge (CPU),SO4
+NFR02,Reproducibility,Fixed seeds and recorded software versions.,Re-running yields the same resources and Q matrices.,"Qiskit 2.x, Python",SO2
+NFR03,Fault tolerance,Long runs survive disconnections.,tmux session; no replica lost to SSH drops.,"tmux, per-replica writes",SO2
+NFR04,Data integrity,Separate test and production runs; verify energies.,x^T Q x = objective_value on rows with bitstring.,statistical_analysis_v2.py,SO3
+NFR05,Comparability,"Both formulations share ansatz, optimizer, replicas and hardware.",Only the Q matrix varies between treatments.,run_aws_full.py,SO2
+NFR06,Traceability,Every figure and table is regenerated from versioned scripts.,One command rebuilds the whole figuras/ folder.,"figuras_tesis.py, extras_tesis.py",All

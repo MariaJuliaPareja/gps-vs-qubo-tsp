@@ -1,8 +1,4 @@
-"""
-formulations.py
-Traditional QUBO (one-hot, Lucas 2014) and GPS (positional matrix,
-Gonzalez-Bermejo et al. 2022, eqs. 8-13) for the TSP.
-"""
+"""Traditional QUBO (one-hot, Lucas 2014) and GPS (positional matrix, Gonzalez-Bermejo et al. 2022, eqs. 8-13) for the TSP."""
 
 import numpy as np
 
@@ -45,12 +41,8 @@ def build_traditional_qubo(dist_matrix: np.ndarray, penalty: float = None) -> np
 
 
 def build_gps_qubo(dist_matrix: np.ndarray, penalty: float = None, lam: float = None):
-    """
-    Variables x_{i,j,r}, i,j in {0,...,N+1} (N = n-1), r in {0,1,2}.
-    The pair (0, N+1) is excluded (depot-to-depot edge, zero cost, not
-    forbidden by the paper's constraints -- see README, "Findings" section).
-    Returns (Q, var_index, N).
-    """
+    """Variables x_{i,j,r}, i,j in {0,...,N+1} (N = n-1), r in {0,1,2}. Returns (Q, var_index, N).
+    Pair (0, N+1) excluded: depot-to-depot, zero cost, not forbidden by the paper's constraints."""
     n = dist_matrix.shape[0]
     if n < 2:
         raise ValueError("At least 2 cities are required.")
