@@ -37,6 +37,16 @@ Traditional QUBO places city i at position p. The variable is x_{i,p}. There are
 
 GPS follows González-Bermejo et al. (2022), equations 8–13, as implemented in `build_gps_qubo`. N = n − 1. The augmented nodes are 0, …, N+1: 0 is the departure depot and N+1 is the arrival depot. The pair {0, N+1} is excluded. It is a depot-to-depot edge, its cost is zero, and the paper’s constraints do not forbid it. Each remaining pair has three states. r = 1 is the direct arc i → j, r = 0 means i comes before j and the cities are not adjacent, r = 2 means i comes after j. The variable count of this implementation is 3(n−1)(n+2).
 
+<p align="center">
+  <img src="figuras/en/fig11_pipeline_bn.png" alt="Experimental pipeline from the Q matrix to the QAOA circuit and the decoding" width="800">
+</p>
+<p align="center"><em>Experimental pipeline, from the Q matrix to the QAOA circuit and the decoding.</em></p>
+
+<p align="center">
+  <img src="figuras/en/anim_onehot_vs_gps.gif" alt="Animated comparison of the one-hot formulation and the GPS positional matrix" width="700">
+</p>
+<p align="center"><em>Animated comparison of the one-hot formulation (n² variables) and the GPS positional matrix (3(n−1)(n+2) variables).</em></p>
+
 | n | Traditional | GPS |
 |---|---|---|
 | 3 | 9 | 30 |
@@ -143,6 +153,16 @@ O QUBO tradicional coloca a cidade i na posição p. A variável é x_{i,p}. Sã
 
 GPS segue González-Bermejo et al. (2022), equações 8–13, como está em `build_gps_qubo`. N = n − 1. Os nós aumentados são 0, …, N+1: 0 é o depósito de saída e N+1 é o depósito de chegada. O par {0, N+1} fica de fora. É uma aresta depósito–depósito, o custo é zero, e as restrições do artigo não a proíbem. Cada par restante tem três estados. r = 1 é o arco direto i → j, r = 0 significa que i vem antes de j e as cidades não são adjacentes, r = 2 significa que i vem depois de j. A contagem de variáveis desta implementação é 3(n−1)(n+2).
 
+<p align="center">
+  <img src="figuras/en/fig11_pipeline_bn.png" alt="Esquema da experiência, da matriz Q ao circuito QAOA e à descodificação" width="800">
+</p>
+<p align="center"><em>Esquema da experiência, da matriz Q ao circuito QAOA e à descodificação.</em></p>
+
+<p align="center">
+  <img src="figuras/en/anim_onehot_vs_gps.gif" alt="Comparação animada entre a formulação one-hot e a matriz posicional GPS" width="700">
+</p>
+<p align="center"><em>Comparação animada entre a formulação one-hot (n² variáveis) e a matriz posicional GPS (3(n−1)(n+2) variáveis).</em></p>
+
 | n | Tradicional | GPS |
 |---|---|---|
 | 3 | 9 | 30 |
@@ -248,6 +268,16 @@ recursos_circuito.csv        conteos de recursos para n = 3..6
 El QUBO tradicional ubica la ciudad i en la posición p. La variable es x_{i,p}. Son n² variables (Lucas, 2014, one-hot). La referencia citada en la tesis para el QUBO tradicional, Montañez-Barrera et al. (2024), es DFJ. DFJ carga un número exponencial de restricciones de subtour, y esos autores solo probaron TSP hasta 7 ciudades. El one-hot de n² es la línea base que cabe en esta simulación. Es una decisión de alcance.
 
 GPS sigue a González-Bermejo et al. (2022), ecuaciones 8–13, como está en `build_gps_qubo`. N = n − 1. Los nodos aumentados son 0, …, N+1: 0 es el depósito de salida y N+1 es el depósito de llegada. El par {0, N+1} queda fuera. Es una arista depósito–depósito, el costo es cero, y las restricciones del artículo no la prohíben. Cada par restante tiene tres estados. r = 1 es el arco directo i → j, r = 0 significa que i va antes que j y las ciudades no son adyacentes, r = 2 significa que i va después de j. El conteo de variables de esta implementación es 3(n−1)(n+2).
+
+<p align="center">
+  <img src="figuras/es/fig11_pipeline_bn.png" alt="Esquema del experimento, de la matriz Q al circuito QAOA y a la decodificación" width="800">
+</p>
+<p align="center"><em>Esquema del experimento, de la matriz Q al circuito QAOA y a la decodificación.</em></p>
+
+<p align="center">
+  <img src="figuras/es/anim_onehot_vs_gps.gif" alt="Comparación animada entre la formulación one-hot y la matriz posicional GPS" width="700">
+</p>
+<p align="center"><em>Comparación animada entre la formulación one-hot (n² variables) y la matriz posicional GPS (3(n−1)(n+2) variables).</em></p>
 
 | n | Tradicional | GPS |
 |---|---|---|
