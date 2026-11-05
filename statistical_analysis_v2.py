@@ -188,7 +188,7 @@ def evaluate_quality(df):
         bits = r.get("optimal_bitstring")
         has_bits = isinstance(bits, list)
 
-        rec = {"A": A, "E_opt": E_opt, "gap_A": (fval - E_opt) / A,
+        rec = {"A": A, "E_opt": E_opt,
                "gap_rel": (fval - E_opt) / abs(E_opt), "E_recalc": np.nan,
                "feasible": np.nan, "optimal": np.nan, "tour_cost": np.nan,
                "criterio": "", "violaciones": ""}
@@ -214,6 +214,9 @@ def evaluate_quality(df):
             rec.update(feasible=abs(fval - E_opt) <= TOL * abs(E_opt), criterio="energía (n=3)")
         else:
             rec["criterio"] = "indeterminado (sin bitstring)"
+        # Misma energía que las figuras: x^T Q x si hay bitstring; si no, el objetivo.
+        E_usada = rec["E_recalc"] if pd.notna(rec["E_recalc"]) else fval
+        rec["gap_A"] = (E_usada - E_opt) / A
         if rec["feasible"] is True or rec["feasible"] is np.True_:
             rec["optimal"] = abs(fval - E_opt) <= TOL * abs(E_opt)
         out.append(rec)

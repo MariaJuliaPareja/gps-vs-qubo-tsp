@@ -1,4 +1,8 @@
-"""Descriptivos, Shapiro-Wilk, Wilcoxon pareado por réplica, correlación y LOWESS."""
+"""No usado en los resultados finales.
+
+Borrador anterior: descriptivos, Shapiro-Wilk, Wilcoxon pareado, correlación y LOWESS.
+Las cifras de la tesis salen de statistical_analysis_v2.py y de figuras_tesis.py.
+"""
 
 import argparse
 import pandas as pd

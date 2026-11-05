@@ -19,7 +19,7 @@ validate_formulations.py     check against brute force and exhaustive enumeratio
 qaoa_experiment.py           local QAOA run
 run_aws_full.py              QAOA run used on EC2
 run_gps_n3_cloud.py          synth03, both formulations, one machine
-statistical_analysis.py      first analysis plan: Shapiro-Wilk, Wilcoxon, correlation, LOWESS
+statistical_analysis.py      earlier plan, not used in the final results
 statistical_analysis_v2.py   analysis used for the thesis
 recursos_circuito.py         circuit resources, without simulating the statevector
 figuras_tesis.py             figures 01–10 and the result tables
@@ -58,7 +58,7 @@ On the machine used for the figures, 31 GB of RAM, the statevector fits while 2^
 
 ### Runs
 
-The AWS scripts use COBYLA, `--reps 2`, and `--maxiter 30`. `qaoa_experiment.py` defaults to `--reps 2`, `--replicas 5`, `--maxiter 50`, and CPU. A JSON does not store the optimizer, `maxiter`, or the number of layers. Where the log prints `eval N/~30`, the iteration cap of that batch is 30. The defaults in the scripts do not replace a value the log does not print. The command line of the production batches is not in the logs. What the logs and the JSON do establish is written in [`datos_tesis/README.md`](datos_tesis/README.md).
+The AWS scripts use COBYLA, `--reps 2`, and `--maxiter 30`. `qaoa_experiment.py` defaults to `--reps 2`, `--replicas 5`, `--maxiter 50`, and CPU. A JSON does not store the optimizer, `maxiter`, or the number of layers. Where the log prints `eval N/~30`, the iteration cap of that batch is 30. The defaults in the scripts do not replace a value the log does not print. The command line of the production batches is not in the logs. Test runs with `maxiter` 5 wrote production filenames (`gps_test_fix.log`, `gps_test_fix2.log`). Those replicas were discarded and relaunched cleanly. The analyzed set is the batches whose cap is 30. What the logs and the JSON do establish is written in [`datos_tesis/README.md`](datos_tesis/README.md).
 
 The machine is an EC2 t2.2xlarge, CPU only. The instance type is not written in the JSON. `run_aws_full.py` has no GPU option. The same machine runs both formulations of synth03, so the execution times can be compared with each other.
 
@@ -72,7 +72,7 @@ Raw energies are not comparable. Each QUBO has its own scale. The gap used in th
 
 `statistical_analysis_v2.py` treats the replicas as independent unless `--paired` is set: Mann-Whitney for time, Fisher for feasibility. `--paired` is only for the case where GPS and Traditional shared a seed per replica. Then the tests are Wilcoxon and McNemar. Qubits, depth, and gate count are constant inside a formulation, so they stay descriptive. Correlations pooled across formulations are not reported: they are confounded with the instance size.
 
-synth03/gps/replica 1 is left out of the energy and of the gap. Its `objective_value` is identical to the Traditional E_opt, and that row is treated as contaminated. It stays in the time comparison. The route gap, in `figuras_tesis.py`, is the cost of the decoded tour against the brute-force optimum, and it is defined only for feasible solutions.
+synth03/gps/replica 1 is left out of the energy and of the gap. Its `objective_value` is identical to the Traditional E_opt, and that row is treated as contaminated. It stays in the time comparison. The drop is in `figuras_tesis.py`. `statistical_analysis_v2.py` keeps the row and does not test the gap: its Mann-Whitney is only for execution time. The route gap, in `figuras_tesis.py`, is the cost of the decoded tour against the brute-force optimum, and it is defined only for feasible solutions.
 
 ### Figures
 
@@ -125,7 +125,7 @@ validate_formulations.py     conferência contra força bruta e enumeração exa
 qaoa_experiment.py           execução local de QAOA
 run_aws_full.py              execução de QAOA usada na EC2
 run_gps_n3_cloud.py          synth03, as duas formulações, uma máquina
-statistical_analysis.py      primeiro plano de análise: Shapiro-Wilk, Wilcoxon, correlação, LOWESS
+statistical_analysis.py      plano anterior, não usado nos resultados finais
 statistical_analysis_v2.py   análise usada na tese
 recursos_circuito.py         recursos do circuito, sem simular o vetor de estado
 figuras_tesis.py             figuras 01–10 e as tabelas de resultados
@@ -164,7 +164,7 @@ Na máquina usada para as figuras, 31 GB de RAM, o vetor de estado cabe enquanto
 
 ### Execuções
 
-Os scripts da AWS usam COBYLA, `--reps 2` e `--maxiter 30`. `qaoa_experiment.py` usa por defeito `--reps 2`, `--replicas 5`, `--maxiter 50` e CPU. Um JSON não guarda o otimizador, `maxiter` nem o número de camadas. Onde o log imprime `eval N/~30`, o teto de iterações desse lote é 30. Os valores por defeito dos scripts não substituem um valor que o log não imprime. A linha de comando dos lotes de produção não está nos logs. O que os logs e os JSON estabelecem está em [`datos_tesis/README.md`](datos_tesis/README.md).
+Os scripts da AWS usam COBYLA, `--reps 2` e `--maxiter 30`. `qaoa_experiment.py` usa por defeito `--reps 2`, `--replicas 5`, `--maxiter 50` e CPU. Um JSON não guarda o otimizador, `maxiter` nem o número de camadas. Onde o log imprime `eval N/~30`, o teto de iterações desse lote é 30. Os valores por defeito dos scripts não substituem um valor que o log não imprime. A linha de comando dos lotes de produção não está nos logs. Ensaios com `maxiter` 5 escreveram nomes de produção (`gps_test_fix.log`, `gps_test_fix2.log`). Essas réplicas foram descartadas e relançadas em limpo. O conjunto analisado é o dos lotes com teto 30. O que os logs e os JSON estabelecem está em [`datos_tesis/README.md`](datos_tesis/README.md).
 
 A máquina é uma EC2 t2.2xlarge, só CPU. O tipo de instância não está escrito nos JSON. `run_aws_full.py` não tem opção de GPU. A mesma máquina corre as duas formulações de synth03, por isso os tempos de execução podem ser comparados entre si.
 
@@ -178,7 +178,7 @@ Energias em bruto não são comparáveis. Cada QUBO tem a sua escala. A lacuna u
 
 `statistical_analysis_v2.py` trata as réplicas como independentes, salvo com `--paired`: Mann-Whitney para o tempo, Fisher para a factibilidade. `--paired` só vale para o caso em que GPS e Tradicional partilharam uma semente por réplica. Aí os testes são Wilcoxon e McNemar. Qubits, profundidade e número de portas são constantes dentro de uma formulação, por isso ficam descritivos. Correlações agrupadas entre formulações não são reportadas: ficam confundidas com o tamanho da instância.
 
-synth03/gps/réplica 1 fica de fora da energia e da lacuna. O `objective_value` é idêntico ao E_opt Tradicional, e essa linha é tratada como contaminada. Permanece na comparação de tempo. A lacuna de rota, em `figuras_tesis.py`, é o custo do percurso descodificado face ao ótimo por força bruta, e só está definida para soluções factíveis.
+synth03/gps/réplica 1 fica de fora da energia e da lacuna. O `objective_value` é idêntico ao E_opt Tradicional, e essa linha é tratada como contaminada. Permanece na comparação de tempo. A exclusão está em `figuras_tesis.py`. `statistical_analysis_v2.py` conserva a linha e não testa a lacuna: o Mann-Whitney aí é só do tempo de execução. A lacuna de rota, em `figuras_tesis.py`, é o custo do percurso descodificado face ao ótimo por força bruta, e só está definida para soluções factíveis.
 
 ### Figuras
 
@@ -231,7 +231,7 @@ validate_formulations.py     contraste contra fuerza bruta y enumeración exhaus
 qaoa_experiment.py           corrida local de QAOA
 run_aws_full.py              corrida de QAOA usada en EC2
 run_gps_n3_cloud.py          synth03, las dos formulaciones, una máquina
-statistical_analysis.py      primer plan de análisis: Shapiro-Wilk, Wilcoxon, correlación, LOWESS
+statistical_analysis.py      plan anterior, no usado en los resultados finales
 statistical_analysis_v2.py   análisis usado en la tesis
 recursos_circuito.py         recursos del circuito, sin simular el statevector
 figuras_tesis.py             figuras 01–10 y las tablas de resultados
@@ -270,7 +270,7 @@ En la máquina usada para las figuras, 31 GB de RAM, el statevector cabe mientra
 
 ### Corridas
 
-Los scripts de AWS usan COBYLA, `--reps 2` y `--maxiter 30`. `qaoa_experiment.py` usa por defecto `--reps 2`, `--replicas 5`, `--maxiter 50` y CPU. Un JSON no guarda el optimizador, `maxiter` ni el número de capas. Donde el log imprime `eval N/~30`, el tope de iteraciones de ese lote es 30. Los valores por defecto de los scripts no sustituyen un valor que el log no imprime. La línea de comando de los lotes de producción no está en los logs. Lo que los logs y los JSON sí dejan establecido está en [`datos_tesis/README.md`](datos_tesis/README.md).
+Los scripts de AWS usan COBYLA, `--reps 2` y `--maxiter 30`. `qaoa_experiment.py` usa por defecto `--reps 2`, `--replicas 5`, `--maxiter 50` y CPU. Un JSON no guarda el optimizador, `maxiter` ni el número de capas. Donde el log imprime `eval N/~30`, el tope de iteraciones de ese lote es 30. Los valores por defecto de los scripts no sustituyen un valor que el log no imprime. La línea de comando de los lotes de producción no está en los logs. Unas pruebas con `maxiter` 5 escribieron el nombre de producción (`gps_test_fix.log`, `gps_test_fix2.log`). Esas réplicas se descartaron y se relanzaron en limpio. El conjunto analizado es el de los lotes con tope 30. Lo que los logs y los JSON sí dejan establecido está en [`datos_tesis/README.md`](datos_tesis/README.md).
 
 La máquina es una EC2 t2.2xlarge, solo CPU. El tipo de instancia no está escrito en los JSON. `run_aws_full.py` no tiene opción de GPU. La misma máquina corre las dos formulaciones de synth03, así que los tiempos de ejecución se pueden comparar entre sí.
 
@@ -284,7 +284,7 @@ Las energías en crudo no son comparables. Cada QUBO tiene su escala. La brecha 
 
 `statistical_analysis_v2.py` trata las réplicas como independientes, salvo con `--paired`: Mann-Whitney para el tiempo, Fisher para la factibilidad. `--paired` solo corresponde al caso en que GPS y Tradicional compartieron semilla por réplica. Ahí las pruebas son Wilcoxon y McNemar. Qubits, profundidad y número de compuertas son constantes dentro de una formulación, así que quedan descriptivos. No se reportan correlaciones agrupadas entre formulaciones: quedan confundidas con el tamaño de la instancia.
 
-synth03/gps/réplica 1 queda fuera de la energía y de la brecha. Su `objective_value` es idéntico al E_opt de Tradicional, y esa fila se trata como contaminada. Se conserva en la comparación de tiempo. La brecha de ruta, en `figuras_tesis.py`, es el costo del tour decodificado frente al óptimo por fuerza bruta, y solo está definida para soluciones factibles.
+synth03/gps/réplica 1 queda fuera de la energía y de la brecha. Su `objective_value` es idéntico al E_opt de Tradicional, y esa fila se trata como contaminada. Se conserva en la comparación de tiempo. La exclusión está en `figuras_tesis.py`. `statistical_analysis_v2.py` conserva la fila y no contrasta la brecha: su Mann-Whitney es solo del tiempo de ejecución. La brecha de ruta, en `figuras_tesis.py`, es el costo del tour decodificado frente al óptimo por fuerza bruta, y solo está definida para soluciones factibles.
 
 ### Figuras
 

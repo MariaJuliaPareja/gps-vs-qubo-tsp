@@ -309,12 +309,18 @@ tab_rec["restricciones_total"] = tab_rec["restr_igualdad"] + tab_rec["restr_tran
 assert int(tab_rec.loc[es_gps & (nn == 3), "restr_igualdad"].iloc[0]) == 21
 tab_rec.to_csv(os.path.join(OUT, "tabla_recursos.csv"), index=False)
 
-res = (df[~df["excluir_energia"]]
-       .groupby(["n_cities", "formulation"])
-       .agg(replicas=("replica", "count"), factibles=("feasible_f", "sum"),
-            brecha_mediana=("brecha", "median"), brecha_media=("brecha", "mean"),
-            brecha_std=("brecha", "std"), tiempo_mediana_s=("execution_time_sec", "median"))
-       .reset_index())
+conteo = (df.groupby(["n_cities", "formulation"])
+          .agg(replicas=("replica", "count"), factibles=("feasible_f", "sum"),
+               tiempo_mediana_s=("execution_time_sec", "median"))
+          .reset_index())
+brechas = (df[~df["excluir_energia"]]
+           .groupby(["n_cities", "formulation"])
+           .agg(brecha_mediana=("brecha", "median"), brecha_media=("brecha", "mean"),
+                brecha_std=("brecha", "std"))
+           .reset_index())
+res = conteo.merge(brechas, on=["n_cities", "formulation"], how="left")
+res = res[["n_cities", "formulation", "replicas", "factibles",
+           "brecha_mediana", "brecha_media", "brecha_std", "tiempo_mediana_s"]]
 res.to_csv(os.path.join(OUT, "tabla_resultados.csv"), index=False)
 
 # OE3: brecha de RUTA (costo del tour decodificado vs óptimo por fuerza bruta), solo soluciones factibles

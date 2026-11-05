@@ -63,7 +63,8 @@ Lo que sí consta:
 
 - QUBO tradicional, synth03: 20 réplicas, índices 0–19, en `resultados/qubo_tradicional/`. El log `results_aws_final/run_completo.log` encabeza el lote como 20 réplicas y los tiempos coinciden en orden con estos JSON. Ese log no imprime `maxiter`.
 - GPS, lote de 19: `maxiter` 30, visible como `eval N/~30` en `gps_batch_v2.log`.
-- GPS, réplica guardada en `backup_rep1/`: `maxiter` 30, visible como `eval N/~30` en `gps_batch_final.log`. El lote se lanzó con 20 réplicas y solo terminó la primera.
+- GPS, réplica guardada en `backup_rep1/`: `maxiter` 30, visible como `eval N/~30` en `gps_batch_final.log`. El lote se lanzó con 20 réplicas y solo terminó la primera. Su tiempo (16 889,9 s) y su objetivo (−14 550,54) coinciden con la línea `OK` de esa réplica. No es un ensayo de `maxiter` 5.
+- Ensayos con `maxiter` 5: `gps_test_fix.log` (1 réplica, `eval N/~5`) y `gps_test_fix2.log` (5 réplicas, `eval N/~5`) escribieron archivos con el nombre de producción. Esas réplicas se descartaron y se relanzaron en limpio. El conjunto analizado es el de los lotes con tope 30.
 - En todos los JSON de este paquete, `circuit_depth` es 6. GPS tiene `n_qubits` 30 y `gate_count` 65. QUBO tradicional tiene `n_qubits` 9 y `gate_count` 23.
 - Los scripts declaran el optimizador COBYLA. Los defaults escritos en `run_aws_full.py` y `run_gps_n3_cloud.py` son `--reps 2` y `--maxiter 30`. `qaoa_experiment.py` declara por defecto `--reps 2`, `--replicas 5`, `--maxiter 50` y `--device CPU`. Esos defaults no sustituyen al valor usado cuando el log no lo imprime.
 
